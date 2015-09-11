@@ -1,0 +1,7 @@
+package com.mugwumps.stackapp.test;
+
+import junit.framework.TestCase;
+
+public class stackappTest extends TestCase {
+
+}
