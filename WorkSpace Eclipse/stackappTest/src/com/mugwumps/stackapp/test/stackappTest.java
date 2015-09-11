@@ -49,7 +49,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 	
 	@SmallTest
 	//checks if launching app creates the right views
-	public void StackAppViewsCreated(){
+	public void testStackAppViewsCreated(){
 		assertNotNull(R.layout.activity_stack_app);
 		assertNotNull(getActivity());
 		assertNotNull(stackLabel);
@@ -60,7 +60,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 	
 	@SmallTest
 	//checks if views are visible
-	public void StackAppViewsVisible(){
+	public void testStackAppViewsVisible(){
 		ViewAsserts.assertOnScreen(stackLabel.getRootView(),stackDisplay);
 		ViewAsserts.assertOnScreen(stackDisplay.getRootView(),stackLabel);
 		ViewAsserts.assertOnScreen(stackLabel.getRootView(),pushButton);
@@ -69,7 +69,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 	
 	@SmallTest
 	//checks if field is being initialized to empty
-	public void StackStartsEmptyTest(){
+	public void testStackStartsEmpty(){
 		super.assertEquals("digit field not empty","", digitField.getText().toString());
 	}
 	
