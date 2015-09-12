@@ -119,13 +119,13 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		activity.push(digit1);
 		stack[0] = digit1;
 		assertFalse(activity.isEmpty());
-		assertEquals(activity.view(),Arrays.toString(stack));
+		assertEquals(Arrays.toString(stack),activity.view());
 		assertEquals(activity.size, 1);
 		
 		activity.push(digit2);
 		stack[0] = digit1;
 		assertFalse(activity.isEmpty());
-		assertEquals(activity.view(),Arrays.toString(stack));
+		assertEquals(Arrays.toString(stack),activity.view());
 		assertEquals(activity.size,1);
 		
 		activity.push(digit3);
