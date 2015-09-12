@@ -81,9 +81,10 @@ public class StackApp extends Activity {
 			return;
 			//throw new IllegalStateException("Stack is full");
 		}
-		if (item > 10){
+		if (item >= 10){
 			InfoMessage = "Use only single digits";
 			//throw new IllegalStateException("Use only single digits");
+			return;
 		}
 		else{
 			stack[size++] = item;
