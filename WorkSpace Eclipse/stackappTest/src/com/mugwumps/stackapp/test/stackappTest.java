@@ -9,10 +9,15 @@ import com.mugwumps.stackapp.*;
 import com.mugwumps.stackapp.R;
 
 import android.app.Activity;
+import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.test.ViewAsserts;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 
 public class stackappTest extends ActivityInstrumentationTestCase2 {
 	
@@ -91,9 +96,9 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		int numberInField;
 		numberInField = Integer.parseInt(digitField.getText().toString());
 		
-		activity.push(numberInField);
-		
-		
+		TouchUtils.clickView(this, pushButton);
+		//activity.push(numberInField);
+			
 		int digit;
 		digit = activity.stack[0];
 		
@@ -118,32 +123,40 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		assertEquals(activity.size, 1);
 		
 		activity.push(digit2);
+		stack[0] = digit1;
 		assertFalse(activity.isEmpty());
-//		assertEquals(activity.view(),Arrays.toString(stack));
-//		assertEquals(activity.size,1);
+		assertEquals(activity.view(),Arrays.toString(stack));
+		assertEquals(activity.size,1);
 		
 		activity.push(digit3);
+		stack[0] = digit1;
 		assertFalse(activity.isEmpty());
-//		assertEquals(activity.view(),Arrays.toString(stack));
-//		assertEquals(activity.size,1);
+		assertEquals(activity.view(),Arrays.toString(stack));
+		assertEquals(activity.size,1);
 		
 		activity.push(digit4);
-		stack[1] = digit2;
+		stack[0] = digit1;
+		stack[1] = digit4;
 		assertFalse(activity.isEmpty());
-//		assertEquals(activity.view(),Arrays.toString(stack));
-//		assertEquals(activity.size,2);
+		assertEquals(activity.view(),Arrays.toString(stack));
+		assertEquals(activity.size,2);
 		
 		activity.push(digit5);
-		stack[2] = digit3;
+		stack[0] = digit1;
+		stack[1] = digit4;
+		stack[2] = digit5;
 		assertFalse(activity.isEmpty());
-//		assertEquals(activity.view(),Arrays.toString(stack));
-//		assertEquals(activity.size,3);
+		assertEquals(activity.view(),Arrays.toString(stack));
+		assertEquals(activity.size,3);
 		
 		activity.push(digit6);
+		stack[0] = digit1;
+		stack[1] = digit4;
+		stack[2] = digit5;
 		assertFalse(activity.isEmpty());
 		assertEquals(activity.InfoMessage, "Stack is full");
-//		assertEquals(activity.view(),Arrays.toString(stack));
-//		assertEquals(activity.size,3);
+		assertEquals(activity.view(),Arrays.toString(stack));
+		assertEquals(activity.size,3);
 		
 	}
 }
