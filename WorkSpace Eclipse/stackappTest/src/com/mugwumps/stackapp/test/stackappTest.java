@@ -99,7 +99,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		TouchUtils.clickView(this, pushButton);
 		//activity.push(numberInField);
 			
-		int digit;
+		Object digit;
 		digit = activity.stack[0];
 		
 		assertEquals("Number in stack is different than in field", digit, numberInField);
@@ -120,26 +120,26 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		stack[0] = digit1;
 		assertFalse(activity.isEmpty());
 		assertEquals(Arrays.toString(stack),activity.view());
-		assertEquals(activity.size, 1);
+		assertEquals(activity.top, 1);
 		
 		activity.push(digit2);
 		stack[0] = digit1;
 		assertFalse(activity.isEmpty());
 		assertEquals(Arrays.toString(stack),activity.view());
-		assertEquals(activity.size,1);
+		assertEquals(activity.top,1);
 		
 		activity.push(digit3);
 		stack[0] = digit1;
 		assertFalse(activity.isEmpty());
 		assertEquals(activity.view(),Arrays.toString(stack));
-		assertEquals(activity.size,1);
+		assertEquals(activity.top,1);
 		
 		activity.push(digit4);
 		stack[0] = digit1;
 		stack[1] = digit4;
 		assertFalse(activity.isEmpty());
 		assertEquals(activity.view(),Arrays.toString(stack));
-		assertEquals(activity.size,2);
+		assertEquals(activity.top,2);
 		
 		activity.push(digit5);
 		stack[0] = digit1;
@@ -147,7 +147,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		stack[2] = digit5;
 		assertFalse(activity.isEmpty());
 		assertEquals(activity.view(),Arrays.toString(stack));
-		assertEquals(activity.size,3);
+		assertEquals(activity.top,3);
 		
 		activity.push(digit6);
 		stack[0] = digit1;
@@ -156,7 +156,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		assertFalse(activity.isEmpty());
 		assertEquals(activity.InfoMessage, "Stack is full");
 		assertEquals(activity.view(),Arrays.toString(stack));
-		assertEquals(activity.size,3);
+		assertEquals(activity.top,3);
 		
 	}
 }
