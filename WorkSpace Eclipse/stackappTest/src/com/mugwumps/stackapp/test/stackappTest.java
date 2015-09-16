@@ -84,7 +84,18 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		assertTrue(activity.isEmpty());
 	}
 	
-	
+	@SmallTest
+	//checks if stack is initialized empty
+	public void testInputFieldClearedAfterPushSingleIntAccepted(){
+		//simulate an input of a number using keyboard
+		TouchUtils.tapView(this, digitField);
+		sendKeys("1");
+				
+		TouchUtils.clickView(this, pushButton);
+		
+		assertTrue(digitField.getText() == null);
+	}
+
 	@SmallTest
 	//checks if push button functions the way it should
 	public void testPushbutton(){
