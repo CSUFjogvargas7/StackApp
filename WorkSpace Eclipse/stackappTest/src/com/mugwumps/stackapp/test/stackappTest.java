@@ -125,9 +125,6 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		int stack[] = new int[3];
 		StringBuffer SB = new StringBuffer();
 		SB.append(" [ ");
-				SB.append("_ ");
-
-		
 		
 		activity.push(digit1);
 		stack[0] = digit1;
@@ -135,20 +132,23 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		assertEquals(activity.view(),SB.append(stack[0]+ " ").append("_ _ ] ").toString());
 		assertEquals(activity.top, 1);
 		
+		SB.delete(5, SB.length());
 		activity.push(digit2);
 		stack[0] = digit1;
 		stack[1] = digit2;
 		assertFalse(activity.isEmpty());
-		assertEquals(activity.view(),SB.append(stack[0]+ " ").append(stack[1]+ " ").append("_ ] ").toString());
+		assertEquals(activity.view(),SB.append(stack[1]+ " ").append("_ ] ").toString());
 		assertEquals(activity.top,2);
 		
+		SB.delete(7, SB.length());
 		activity.push(digit3);
 		stack[0] = digit1;
 		stack[1] = digit2;
 		stack[2] = digit3;
 		assertFalse(activity.isEmpty());
-		assertEquals(activity.view(),SB.append(stack[0]+ " ").append(stack[1]+ " ").append(stack[2]+ " ").append("] ").toString());
+		assertEquals(activity.view(),SB.append(stack[2]+ " ").append("] ").toString());
 		assertEquals(activity.top,3);
+		
 		
 		activity.push(digit4);
 		stack[0] = digit1;
@@ -156,7 +156,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		stack[2] = digit3;
 		assertFalse(activity.isEmpty());
 		assertEquals(activity.InfoMessage, "Stack is full");
-		assertEquals(activity.view(),SB.append(stack[0]+ " ").append(stack[1]+ " ").append(stack[2]+ " ").append("] ").toString());
+		assertEquals(activity.view(),SB.toString());
 		assertEquals(activity.top,3);
 		
 	}
