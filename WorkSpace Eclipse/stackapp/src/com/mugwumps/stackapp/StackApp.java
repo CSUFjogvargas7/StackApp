@@ -20,17 +20,26 @@ public class StackApp extends Activity {
 	private String stackString;
 	TextView stackDisplay;
 	Button Pushbutton;
+	Button PopButton;
+	Button ClearButton;
+	Button QuitButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_stack_app);
 		
-		Pushbutton=(Button)findViewById(R.id.button1);
 		stackDisplay = (TextView)findViewById(R.id.StackContents);
-		
-		
+		Pushbutton=(Button)findViewById(R.id.button1);
+		PopButton=(Button)findViewById(R.id.buttonPop);
+		ClearButton=(Button)findViewById(R.id.buttonClear);
+		QuitButton=(Button)findViewById(R.id.buttonQuit);
+		stackDisplay = (TextView)findViewById(R.id.StackContents);
+				
 		Pushbutton.setOnClickListener(onClickListener);
+		PopButton.setOnClickListener(popStack);
+		ClearButton.setOnClickListener(clearStack);
+		QuitButton.setOnClickListener(quitApplication);
 	}
 
 	private OnClickListener onClickListener = new OnClickListener(){
@@ -46,6 +55,35 @@ public class StackApp extends Activity {
 			Toast toast = new Toast (getApplicationContext());
 			toast.setGravity(Gravity.TOP, 0, 0);
 			toast.makeText(StackApp.this, InfoMessage, toast.LENGTH_SHORT).show();
+			digitField.setText("");
+		}
+	};
+	
+	private OnClickListener quitApplication = new OnClickListener(){
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			finish();
+			System.exit(0);
+		}
+	};
+	
+	private OnClickListener clearStack = new OnClickListener(){
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub			
+					
+		}
+	};
+	
+	private OnClickListener popStack = new OnClickListener(){
+		
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+		
 		}
 	};
 	

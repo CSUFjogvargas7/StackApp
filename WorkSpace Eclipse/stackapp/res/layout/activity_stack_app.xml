@@ -52,5 +52,33 @@
         android:layout_marginStart="29dp"
         android:text="@string/stackLabel"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    
+    <Button
+        android:id="@+id/buttonPop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/button1"
+        android:layout_alignBottom="@+id/button1"
+        android:layout_toRightOf="@id/button1"
+        android:text="Pop" />
+
+    <Button
+        android:id="@+id/buttonClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/StackContents"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_marginBottom="44dp"
+        android:text="Clear Stack" />
+
+    <Button
+        android:id="@+id/buttonQuit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonClear"
+        android:layout_toRightOf="@+id/buttonClear"
+        android:layout_alignRight="@+id/editText1"
+        android:text="Quit" />
 
 </RelativeLayout>
