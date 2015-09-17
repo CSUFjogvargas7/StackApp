@@ -70,34 +70,44 @@ public class StackApp extends Activity {
 	
 	
 	//SECTION WHERE ALL THE METHODS ARE IMPLEMENTED
-	private int MAX = 3;
-	public int [] stack = new int[MAX]; 
-	public int size = 0;
+	private int maxSize = 3;
+	public Object [] stack = new Object[maxSize]; 
+	public int top = 0;
 	public String InfoMessage;
-	
-	public void push(int item) {
-		if (size == stack.length){
+	//haven't tested this
+	public void push(Object item) {
+		if (top == stack.length){
 			InfoMessage = "Stack is full";
 			return;
 			//throw new IllegalStateException("Stack is full");
 		}
-		if (item >= 10){
+		if (Integer.parseInt(item.toString()) >= 10){
 			InfoMessage = "Use only single digits";
 			//throw new IllegalStateException("Use only single digits");
 			return;
 		}
 		else{
-			stack[size++] = item;
+			stack[top++] = item;
 			InfoMessage = String.valueOf(item) + " is pushed to the stack";
+			return;
 		}
 	}
-	
+	//haven't tested this.
 	public String view() {
-		return Arrays.toString(stack);
+		StringBuffer SB = new StringBuffer();
+		SB.append(" [ ");
+		for (int i = 0; i < maxSize; i++){
+			if(stack[i] == null)
+				SB.append("_ ");
+			else
+				SB.append(stack[i] + " ");
+		}
+		SB.append("] ");
+		return SB.toString();
 	}
 	
 	public boolean isEmpty() {
-		return size == 0;
+		return top == 0;
 	}
 	
 }
