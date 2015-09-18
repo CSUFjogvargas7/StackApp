@@ -10,10 +10,12 @@ import com.mugwumps.stackapp.R;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.ToneGenerator;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.test.ViewAsserts;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,32 +89,35 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 	@SmallTest
 	//checks if stack is initialized empty
 	public void testInputFieldClearedAfterPushSingleIntAccepted(){
+		digitField.clearComposingText();
+		
 		//simulate an input of a number using keyboard
 		TouchUtils.tapView(this, digitField);
 		sendKeys("1");
 				
 		TouchUtils.clickView(this, pushButton);
-		
 		super.assertEquals("Digit field not cleared","",digitField.getText().toString());
 	}
 
 	@SmallTest
 	//checks if push button functions the way it should
 	public void testPushbutton(){
+		//Arrange
 		digitField.clearComposingText();
+		Object digit;
+		int numberInField;
 		
-		//simulate a tap
+		//simulate a blank push
+		TouchUtils.clickView(this, pushButton);
+		super.assertTrue(TextUtils.isEmpty(digitField.getText().toString()));
+		
+		//simulate a key entered
 		TouchUtils.tapView(this, digitField);
 		sendKeys("1");
-		int numberInField;
 		numberInField = Integer.parseInt(digitField.getText().toString());
-		
 		TouchUtils.clickView(this, pushButton);
-			
-		Object digit;
 		digit = activity.stack[0];
-		
-		assertEquals("Number in stack is different than in field", Integer.parseInt(digit.toString()), numberInField);
+		super.assertEquals("Number in stack is different than in field", Integer.parseInt(digit.toString()), numberInField);
 	}
 	
 	@SmallTest
