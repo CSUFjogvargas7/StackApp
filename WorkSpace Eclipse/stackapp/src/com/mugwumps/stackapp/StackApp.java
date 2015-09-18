@@ -130,20 +130,13 @@ public class StackApp extends Activity {
 		if (top == stack.length){
 			InfoMessage = "Stack is full";
 			return;
-			//throw new IllegalStateException("Stack is full");
-		}
-		if (Integer.parseInt(item.toString()) >= 10){
-			InfoMessage = "Use only single digits";
-			//throw new IllegalStateException("Use only single digits");
-			return;
-		}
-		else{
+		} else {
 			stack[top++] = item;
 			InfoMessage = String.valueOf(item) + " is pushed to the stack";
 			return;
 		}
 	}
-	//haven't tested this.
+
 	public String view() {
 		StringBuffer SB = new StringBuffer();
 		SB.append(" [ ");
