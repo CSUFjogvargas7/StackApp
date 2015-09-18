@@ -17,7 +17,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="44dp"
         android:ems="10"
-        android:inputType="number" >
+        android:inputType="number"
+        android:maxLength="1" >
 
         <requestFocus />
     </EditText>

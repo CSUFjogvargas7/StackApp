@@ -2,7 +2,10 @@ package com.mugwumps.stackapp;
 
 import android.app.*;
 import android.content.*;
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.*;
+import android.text.TextUtils;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -23,6 +26,7 @@ public class StackApp extends Activity {
 	Button PopButton;
 	Button ClearButton;
 	Button QuitButton;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,22 +40,29 @@ public class StackApp extends Activity {
 		QuitButton=(Button)findViewById(R.id.buttonQuit);
 		stackDisplay = (TextView)findViewById(R.id.StackContents);
 				
-		Pushbutton.setOnClickListener(onClickListener);
+		Pushbutton.setOnClickListener(pushStack);
 		PopButton.setOnClickListener(popStack);
 		ClearButton.setOnClickListener(clearStack);
 		QuitButton.setOnClickListener(quitApplication);
 	}
 
-	private OnClickListener onClickListener = new OnClickListener(){
+	private OnClickListener pushStack = new OnClickListener(){
 		
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 			digitField = (EditText)findViewById(R.id.editText1);
-			digit = Integer.parseInt(digitField.getText().toString());
-			push(digit);
-			stackString = view(); 
-			stackDisplay.setText(stackString);
+			String digitString = digitField.getText().toString();
+			if(TextUtils.isEmpty(digitString)){
+				InfoMessage = "Nothing to push";
+				digitField.setError(InfoMessage);
+				return;
+			} else {
+				digit = Integer.parseInt(digitString);
+				push(digit);
+				stackString = view(); 
+				stackDisplay.setText(stackString);
+			}
 			Toast toast = new Toast (getApplicationContext());
 			toast.setGravity(Gravity.TOP, 0, 0);
 			toast.makeText(StackApp.this, InfoMessage, toast.LENGTH_SHORT).show();
@@ -64,8 +75,10 @@ public class StackApp extends Activity {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+			toneG.startTone(ToneGenerator.TONE_PROP_BEEP); 
 			finish();
-			System.exit(0);
+			//System.exit(0);
 		}
 	};
 	
