@@ -26,6 +26,8 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 	TextView stackLabel, stackDisplay;
 	EditText digitField;
 	Button pushButton;
+	Button popButton;
+	Button clearStack;
 	StackApp activity;
 	
 	
@@ -45,6 +47,8 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		stackDisplay = (TextView)activity.findViewById(R.id.StackContents);
 		pushButton = (Button)activity.findViewById(R.id.button1);
 		digitField = (EditText)activity.findViewById(R.id.editText1);
+		popButton = (Button)activity.findViewById(R.id.buttonPop);
+		clearStack = (Button)activity.findViewById(R.id.buttonClear);
 	}
 	
 	
@@ -63,6 +67,9 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		assertNotNull(stackDisplay);
 		assertNotNull(pushButton);
 		assertNotNull(digitField);
+		assertNotNull(popButton);
+		assertNotNull(clearStack);
+		
 	}
 	
 	@SmallTest
@@ -72,6 +79,8 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		ViewAsserts.assertOnScreen(stackDisplay.getRootView(),stackLabel);
 		ViewAsserts.assertOnScreen(stackLabel.getRootView(),pushButton);
 		ViewAsserts.assertOnScreen(stackLabel.getRootView(),digitField);
+		ViewAsserts.assertOnScreen(stackLabel.getRootView(),popButton);
+		ViewAsserts.assertOnScreen(stackLabel.getRootView(),clearStack);
 	}
 	
 	@SmallTest
@@ -118,6 +127,50 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		TouchUtils.clickView(this, pushButton);
 		digit = activity.stack[0];
 		super.assertEquals("Number in stack is different than in field", Integer.parseInt(digit.toString()), numberInField);
+	}
+	
+	@SmallTest
+	//checks if push button functions the way it should
+	public void testPopbutton(){
+		
+		String stacktest = " [ 1 2 _ ] ";
+		activity.push(1);
+		activity.push(2);
+		activity.push(3);
+		
+		//simulate a blank pop
+		TouchUtils.clickView(this, popButton);
+		
+		super.assertEquals(stacktest, activity.view());
+	}
+	
+	@SmallTest
+	//checks if push button functions the way it should
+	public void testClearButton(){
+		
+		String stacktest = " [ _ _ _ ] ";
+		activity.push(1);
+		activity.push(2);
+		activity.push(3);
+		
+		//simulate a blank pop
+		TouchUtils.clickView(this, clearStack);
+		
+		super.assertEquals(stacktest, activity.view());
+	}
+	
+	@SmallTest
+	//checks if stack is initialized empty
+	public void testMaxLengthOfInputIsOneDigit(){
+		//simulate an input of a number using keyboard
+		TouchUtils.tapView(this, digitField);
+		sendKeys("1");
+		TouchUtils.tapView(this, digitField);
+		sendKeys("2");
+		TouchUtils.tapView(this, digitField);
+		sendKeys("3");
+		
+		super.assertEquals("1", digitField.getText().toString());
 	}
 	
 	@SmallTest
