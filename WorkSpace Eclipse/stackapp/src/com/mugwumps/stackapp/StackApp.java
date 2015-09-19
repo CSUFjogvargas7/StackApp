@@ -63,9 +63,7 @@ public class StackApp extends Activity {
 				stackString = view(); 
 				stackDisplay.setText(stackString);
 			}
-			Toast toast = new Toast (getApplicationContext());
-			toast.setGravity(Gravity.TOP, 0, 0);
-			toast.makeText(StackApp.this, InfoMessage, toast.LENGTH_SHORT).show();
+			ShowToast(InfoMessage);
 			digitField.setText("");
 		}
 	};
@@ -87,7 +85,10 @@ public class StackApp extends Activity {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub			
-					
+			clear();
+			ShowToast(InfoMessage);
+			stackString = view(); 
+			stackDisplay.setText(stackString);		
 		}
 	};
 	
@@ -96,7 +97,10 @@ public class StackApp extends Activity {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-		
+			pop();
+			stackString = view(); 
+			stackDisplay.setText(stackString);
+			ShowToast(InfoMessage);
 		}
 	};
 	
@@ -150,8 +154,35 @@ public class StackApp extends Activity {
 		return SB.toString();
 	}
 	
+	public void pop() {
+		if (isEmpty()){
+			InfoMessage = "Stack is Empty";
+			return;
+		}
+		Object obj = stack[top-1];
+		
+		stack[--top] = null;
+		InfoMessage = String.valueOf(obj) + " is popped from the stack";
+		return;
+	}
+	
+	public void clear() {
+
+		for (int i = 0; i < maxSize; i++ )
+			stack[i] = null;
+		top = 0;
+
+		InfoMessage = "Stack is clear";
+		return;
+	}
+	
 	public boolean isEmpty() {
 		return top == 0;
 	}
 	
+	private void ShowToast (String msg){
+		Toast toast = new Toast (getApplicationContext());
+		toast.setGravity(Gravity.TOP, 0, 0);
+		toast.makeText(StackApp.this, msg, toast.LENGTH_SHORT).show();
+	}
 }
