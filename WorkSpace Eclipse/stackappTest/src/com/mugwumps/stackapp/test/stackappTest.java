@@ -14,6 +14,8 @@ import android.media.ToneGenerator;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.TouchUtils;
 import android.test.ViewAsserts;
+import android.test.suitebuilder.annotation.LargeTest;
+import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -27,6 +29,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 	EditText digitField;
 	Button pushButton;
 	Button popButton;
+	Button undoButton;
 	Button clearStack;
 	StackApp activity;
 	
@@ -48,6 +51,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		pushButton = (Button)activity.findViewById(R.id.buttonPush);
 		digitField = (EditText)activity.findViewById(R.id.editText1);
 		popButton = (Button)activity.findViewById(R.id.buttonPop);
+		undoButton = (Button)activity.findViewById(R.id.buttonUndo);
 		clearStack = (Button)activity.findViewById(R.id.buttonClear);
 	}
 	
@@ -56,6 +60,16 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 	protected void tearDown() throws Exception {
 		// TODO Auto-generated method stub
 		super.tearDown();
+		
+		//tearDown Views
+		activity = null;
+		stackLabel = null;
+		stackDisplay = null;
+		pushButton = null;
+		digitField = null;
+		popButton = null;
+		undoButton = null;
+		clearStack = null;
 	}
 	
 	@SmallTest
@@ -68,6 +82,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		assertNotNull(pushButton);
 		assertNotNull(digitField);
 		assertNotNull(popButton);
+		assertNotNull(undoButton);
 		assertNotNull(clearStack);
 		
 	}
@@ -80,6 +95,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		ViewAsserts.assertOnScreen(stackLabel.getRootView(),pushButton);
 		ViewAsserts.assertOnScreen(stackLabel.getRootView(),digitField);
 		ViewAsserts.assertOnScreen(stackLabel.getRootView(),popButton);
+		ViewAsserts.assertOnScreen(stackLabel.getRootView(),undoButton);
 		ViewAsserts.assertOnScreen(stackLabel.getRootView(),clearStack);
 	}
 	
@@ -92,10 +108,10 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 	@SmallTest
 	//checks if stack is initialized empty
 	public void testStackInitializedEmpty(){
-		assertTrue(activity.isEmpty());
+		super.assertTrue(activity.isEmpty());
 	}
 	
-	@SmallTest
+	@MediumTest
 	//checks if stack is initialized empty
 	public void testInputFieldClearedAfterPushSingleIntAccepted(){
 		digitField.clearComposingText();
@@ -153,10 +169,29 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		activity.push(2);
 		activity.push(3);
 		
-		//simulate a blank pop
+		//simulate a clear button push
 		TouchUtils.clickView(this, clearStack);
 		
 		super.assertEquals(stacktest, activity.view());
+	}
+	
+	@MediumTest
+	public void testDoUndoButton(){
+		  digitField.clearComposingText(); 
+		  String stackTest = " [ 5 _ _ ] ";
+
+		  TouchUtils.tapView(this, digitField);
+		  sendKeys("5");
+
+		  TouchUtils.clickView(this, pushButton);
+		  super.assertEquals(activity.view(), stackTest);
+		  
+		  TouchUtils.clickView(this, undoButton);
+		  super.assertTrue(activity.isEmpty());
+
+		  TouchUtils.clickView(this, undoButton);
+		  super.assertEquals(activity.view(), stackTest);
+
 	}
 	
 	@SmallTest
@@ -173,7 +208,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		super.assertEquals("1", digitField.getText().toString());
 	}
 	
-	@SmallTest
+	@MediumTest
 	//checks if push method's logic is right
 	public void testPush(){
 		int digit1 = 2;
@@ -228,10 +263,10 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		
 		activity.clear();
 		
-		assertTrue(activity.isEmpty());
+		super.assertTrue(activity.isEmpty());
 	}
 	
-	@SmallTest
+	@MediumTest
 	//checks if pop method's logic is right
 	public void testPop(){
 		Object digit1 = 2;
