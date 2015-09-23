@@ -24,7 +24,7 @@
     </EditText>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/buttonPush"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/editText1"
@@ -59,9 +59,9 @@
         android:id="@+id/buttonPop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button1"
-        android:layout_alignBottom="@+id/button1"
-        android:layout_toRightOf="@id/button1"
+        android:layout_alignBaseline="@+id/buttonPush"
+        android:layout_alignBottom="@+id/buttonPush"
+        android:layout_toRightOf="@id/buttonPush"
         android:text="Pop" />
 
     <Button
@@ -81,5 +81,14 @@
         android:layout_toRightOf="@+id/buttonClear"
         android:layout_alignRight="@+id/editText1"
         android:text="Quit" />
+    
+    <Button
+        android:id="@+id/buttonUndo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/buttonPop"
+        android:layout_alignBottom="@+id/buttonPop"
+        android:layout_alignRight="@+id/editText1"
+        android:text="Undo" />
 
 </RelativeLayout>

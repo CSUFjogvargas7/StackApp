@@ -1,188 +1,236 @@
 package com.mugwumps.stackapp;
 
-import android.app.*;
-import android.content.*;
+import android.app.Activity;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
-import android.os.*;
+import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.*;
+import android.view.Gravity;
+import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.*;
-import com.mugwumps.stackapp.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+import java.util.Stack;
 
-import java.util.*;
-import java.util.Arrays;
-
-@SuppressWarnings("deprecation")
 public class StackApp extends Activity {
 
-	int item;
-	private EditText digitField;
-	public int digit;
-	private String stackString;
-	TextView stackDisplay;
-	Button Pushbutton;
-	Button PopButton;
-	Button ClearButton;
-	Button QuitButton;
-	
+  int item;
+  private Stack undoStack = new Stack();
+  private Stack objStack = new Stack();
+  Object objPopped = null;
+  Object funcPopped = null;
+  
+  private EditText digitField;
+  public int digit;
+  private String stackString;
+  TextView stackDisplay;
+  Button pushButton;
+  Button popButton;
+  Button clearButton;
+  Button quitButton;
+  Button undoButton;
+  Toast toast;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_stack_app);
-		
-		stackDisplay = (TextView)findViewById(R.id.StackContents);
-		Pushbutton=(Button)findViewById(R.id.button1);
-		PopButton=(Button)findViewById(R.id.buttonPop);
-		ClearButton=(Button)findViewById(R.id.buttonClear);
-		QuitButton=(Button)findViewById(R.id.buttonQuit);
-		stackDisplay = (TextView)findViewById(R.id.StackContents);
-				
-		Pushbutton.setOnClickListener(pushStack);
-		PopButton.setOnClickListener(popStack);
-		ClearButton.setOnClickListener(clearStack);
-		QuitButton.setOnClickListener(quitApplication);
-	}
+  
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_stack_app);
+    
+    stackDisplay = (TextView)findViewById(R.id.StackContents);
+    pushButton = (Button)findViewById(R.id.buttonPush);
+    popButton = (Button)findViewById(R.id.buttonPop);
+    clearButton = (Button)findViewById(R.id.buttonClear);
+    quitButton = (Button)findViewById(R.id.buttonQuit);
+    undoButton = (Button)findViewById(R.id.buttonUndo);
+    stackDisplay = (TextView)findViewById(R.id.StackContents);
 
-	private OnClickListener pushStack = new OnClickListener(){
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			digitField = (EditText)findViewById(R.id.editText1);
-			String digitString = digitField.getText().toString();
-			if(TextUtils.isEmpty(digitString)){
-				InfoMessage = "Nothing to push";
-				digitField.setError(InfoMessage);
-				return;
-			} else {
-				digit = Integer.parseInt(digitString);
-				push(digit);
-				stackString = view(); 
-				stackDisplay.setText(stackString);
-			}
-			ShowToast(InfoMessage);
-			digitField.setText("");
-		}
-	};
-	
-	private OnClickListener quitApplication = new OnClickListener(){
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
-			toneG.startTone(ToneGenerator.TONE_PROP_BEEP); 
-			finish();
-			//System.exit(0);
-		}
-	};
-	
-	private OnClickListener clearStack = new OnClickListener(){
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub			
-			clear();
-			ShowToast(InfoMessage);
-			stackString = view(); 
-			stackDisplay.setText(stackString);		
-		}
-	};
-	
-	private OnClickListener popStack = new OnClickListener(){
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			pop();
-			stackString = view(); 
-			stackDisplay.setText(stackString);
-			ShowToast(InfoMessage);
-		}
-	};
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.stack_app, menu);
-		return true;
-	}
+    pushButton.setOnClickListener(pushStack);
+    popButton.setOnClickListener(popStack);
+    clearButton.setOnClickListener(clearStack);
+    quitButton.setOnClickListener(quitApplication);
+    undoButton.setOnClickListener(undoFunction);
+  }
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-	
-	
-	//SECTION WHERE ALL THE METHODS ARE IMPLEMENTED
-	private int maxSize = 3;
-	public Object [] stack = new Object[maxSize]; 
-	public int top = 0;
-	public String InfoMessage;
-	//haven't tested this
-	public void push(Object item) {
-		if (top == stack.length){
-			InfoMessage = "Stack is full";
-			return;
-		} else {
-			stack[top++] = item;
-			InfoMessage = String.valueOf(item) + " is pushed to the stack";
-			return;
-		}
-	}
+  private OnClickListener pushStack = new OnClickListener(){
 
-	public String view() {
-		StringBuffer SB = new StringBuffer();
-		SB.append(" [ ");
-		for (int i = 0; i < maxSize; i++){
-			if(stack[i] == null)
-				SB.append("_ ");
-			else
-				SB.append(stack[i] + " ");
-		}
-		SB.append("] ");
-		return SB.toString();
-	}
-	
-	public void pop() {
-		if (isEmpty()){
-			InfoMessage = "Stack is Empty";
-			return;
-		}
-		Object obj = stack[top-1];
-		
-		stack[--top] = null;
-		InfoMessage = String.valueOf(obj) + " is popped from the stack";
-		return;
-	}
-	
-	public void clear() {
+    @Override
+    public void onClick(View pushButton) {
+      digitField = (EditText)findViewById(R.id.editText1);
+      String digitString = digitField.getText().toString();
+      if (TextUtils.isEmpty(digitString)) {
+        infoMessage = "Nothing to push";
+        digitField.setError(infoMessage);
+        return;
+      } else {
+        digit = Integer.parseInt(digitString);
+        push(digit);
+     //   startAnimation(pushButton);
+        stackString = view(); 
+        stackDisplay.setText(stackString);
+      }
+      showToast(infoMessage);
+      digitField.setText("");
+    }
+  };
 
-		for (int i = 0; i < maxSize; i++ )
-			stack[i] = null;
-		top = 0;
+  private OnClickListener undoFunction = new OnClickListener(){
 
-		InfoMessage = "Stack is clear";
-		return;
-	}
-	
-	public boolean isEmpty() {
-		return top == 0;
-	}
-	
-	private void ShowToast (String msg){
-		Toast toast = new Toast (getApplicationContext());
-		toast.setGravity(Gravity.TOP, 0, 0);
-		toast.makeText(StackApp.this, msg, toast.LENGTH_SHORT).show();
-	}
+    @Override
+    public void onClick(View undoButton) {
+      if (undoStack.isEmpty()){
+        infoMessage = "Nothing to Undo";
+        showToast(infoMessage);
+        return;
+      } else {
+        undo();
+      }
+      stackString = view(); 
+      stackDisplay.setText(stackString);
+
+    }
+  };
+  
+  private OnClickListener quitApplication = new OnClickListener(){
+
+    @Override
+    public void onClick(View quitButton) {
+      ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+      toneG.startTone(ToneGenerator.TONE_PROP_BEEP); 
+      objStack = null;
+      undoStack = null;
+      finish();
+    }
+  };
+
+  private OnClickListener clearStack = new OnClickListener(){
+
+    @Override
+    public void onClick(View clearButton) {
+      clear();
+      showToast(infoMessage);
+      stackString = view(); 
+      stackDisplay.setText(stackString);
+    }
+  };
+
+  private OnClickListener popStack = new OnClickListener(){
+
+    @Override
+    public void onClick(View popButton) {
+      pop();
+      //startAnimation(popButton);
+      stackString = view(); 
+      stackDisplay.setText(stackString);
+      showToast(infoMessage);
+    }
+  };
+  
+  private void showToast(String msg){
+    toast = new Toast(getApplicationContext());
+    toast.setGravity(Gravity.TOP, 0, 0);
+    Toast.makeText(StackApp.this, msg, Toast.LENGTH_SHORT).show();
+  }
+
+  private int maxSize = 3;
+  public Object [] stack = new Object[maxSize]; 
+  public int top = 0;
+  public String infoMessage;
+  private int size = 3;
+  
+  public void push(Object item) {
+    if (top == stack.length) {
+      infoMessage = "Stack is full";
+      return;
+    } else {
+      stack[top++] = item;
+      infoMessage = String.valueOf(item) + " is pushed to the stack";
+      undoStack.push(pushButton);
+      objStack.push(item);
+      return;
+    }
+  }
+
+  public String view() {
+    StringBuffer stringBuffer = new StringBuffer();
+    stringBuffer.append(" [ ");
+    for (int i = 0; i < size; i++) {
+      if (stack[i] == null) {
+        stringBuffer.append("_ ");
+      } else {
+        stringBuffer.append(stack[i] + " ");
+      }
+    }
+    stringBuffer.append("] ");
+    return stringBuffer.toString();
+  }
+
+  public void pop() {
+    if (isEmpty()) {
+      infoMessage = "Stack is Empty";
+      return;
+    }
+    Object obj = stack[top - 1];
+    stack[--top] = null;
+    infoMessage = String.valueOf(obj) + " is popped from the stack";
+    undoStack.push(popButton);
+    objStack.push(obj);
+    return;
+  }
+
+  public void clear() {
+    for (int i = 0; i < size; i++ ) {
+      stack[i] = null;
+    }
+    top = 0;
+    infoMessage = "Stack is clear";
+    return;
+  }
+
+  public boolean isEmpty() {
+    return top == 0;
+  }
+  
+  public void undo() { 
+    
+    if (undoStack.peek() == pushButton) {
+      objPopped = objStack.pop();
+      funcPopped = pushButton;
+      pop();
+      
+      undoStack.pop();
+      objStack.push(objPopped);
+      undoStack.push(undoButton);
+      
+    } else if (undoStack.peek() == popButton) {
+      objPopped = objStack.pop();
+      funcPopped = popButton;
+      push(objPopped);
+      
+      undoStack.pop();
+      objStack.push(objPopped);
+      undoStack.push(undoButton);
+      
+    } else if (undoStack.peek() == undoButton) {
+      objPopped = objStack.pop();
+      if (funcPopped == pushButton) {
+        push(objPopped);
+        undoStack.pop();
+        objStack.pop();
+      } else if (funcPopped == popButton) {
+        pop();
+        undoStack.pop();
+        objStack.pop();
+      }
+      undoStack.push("");
+      objStack.push("");
+    } else {
+      infoMessage = "Nothing to Undo";
+      showToast(infoMessage);
+      return;
+    }
+    
+  }
 }
