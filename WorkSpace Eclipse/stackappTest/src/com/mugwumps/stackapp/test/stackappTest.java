@@ -45,7 +45,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		activity = (StackApp) getActivity();
 		stackLabel = (TextView)activity.findViewById(R.id.textView1);
 		stackDisplay = (TextView)activity.findViewById(R.id.StackContents);
-		pushButton = (Button)activity.findViewById(R.id.button1);
+		pushButton = (Button)activity.findViewById(R.id.buttonPush);
 		digitField = (EditText)activity.findViewById(R.id.editText1);
 		popButton = (Button)activity.findViewById(R.id.buttonPop);
 		clearStack = (Button)activity.findViewById(R.id.buttonClear);
@@ -145,7 +145,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 	}
 	
 	@SmallTest
-	//checks if push button functions the way it should
+	//checks if clear button functions the way it should
 	public void testClearButton(){
 		
 		String stacktest = " [ _ _ _ ] ";
@@ -160,7 +160,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 	}
 	
 	@SmallTest
-	//checks if stack is initialized empty
+	//checks if maxLength of stack is 1
 	public void testMaxLengthOfInputIsOneDigit(){
 		//simulate an input of a number using keyboard
 		TouchUtils.tapView(this, digitField);
@@ -169,7 +169,7 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		sendKeys("2");
 		TouchUtils.tapView(this, digitField);
 		sendKeys("3");
-		
+
 		super.assertEquals("1", digitField.getText().toString());
 	}
 	
@@ -213,9 +213,55 @@ public class stackappTest extends ActivityInstrumentationTestCase2 {
 		stack[1] = digit2;
 		stack[2] = digit3;
 		assertFalse(activity.isEmpty());
-		assertEquals(activity.InfoMessage, "Stack is full");
+		assertEquals(activity.infoMessage, "Stack is full");
 		assertEquals(activity.view(),SB.toString());
 		assertEquals(activity.top,3);
+		
+	}
+	
+	@SmallTest
+	//checks if clear method's logic is right
+	public void testClear(){
+		activity.push(1);
+		activity.push(2);
+		activity.push(3);
+		
+		activity.clear();
+		
+		assertTrue(activity.isEmpty());
+	}
+	
+	@SmallTest
+	//checks if pop method's logic is right
+	public void testPop(){
+		Object digit1 = 2;
+		Object digit2 = 3;
+		Object digit3 = 5;
+		activity.push(digit1);
+		activity.push(digit2);
+		activity.push(digit3);
+		StringBuffer SB = new StringBuffer();
+		SB.append(" [ ");
+		
+		activity.pop();
+		assertEquals(activity.view(),SB.append(digit1+ " ").append(digit2+" ").append("_ ] ").toString());
+		assertEquals(activity.top, 2);
+		
+		SB.delete(5, SB.length());
+		activity.pop();
+		assertEquals(activity.view(),SB.append("_ _ ] ").toString());
+		assertEquals(activity.top,1);
+		
+		SB.delete(3, SB.length());
+		activity.pop();
+		assertEquals(activity.view(),SB.append("_ _ _ ] ").toString());
+		assertEquals(activity.top,0);
+		
+		activity.pop();;
+		assertTrue(activity.isEmpty());
+		assertEquals(activity.infoMessage, "Stack is Empty");
+		assertEquals(activity.view(),SB.toString());
+		assertEquals(activity.top,0);
 		
 	}
 }
